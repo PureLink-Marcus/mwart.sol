@@ -34,7 +34,14 @@ RUN mkdir -p /var/www/html/data \
  && printf 'Require all denied\n' > /var/www/html/data/.htaccess \
  && chown -R www-data:www-data /var/www/html/data
 
+# Apache Standardseite deaktivieren
+RUN rm -f /var/www/html/index.html.* \
+ && echo "ServerName mwart.solutions" >> /etc/apache2/apache2.conf
+
+# DirectoryIndex explizit setzen
+RUN echo "DirectoryIndex index.html index.php" >> /etc/apache2/mods-enabled/dir.conf
+
 EXPOSE 80
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-  CMD php -r 'exit(@file_get_contents("http://127.0.0.1/index.html") ? 0 : 1);'
+  CMD curl -f http://127.0.0.1/index.html || exit 1

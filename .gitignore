@@ -1,0 +1,7 @@
+# Laufzeitdaten (Statistik, Kontaktanfragen, Salt) — gehören nicht ins Repository
+data/
+
+# Lokale Umgebung
+.env
+.env.local
+.DS_Store

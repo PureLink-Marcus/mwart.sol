@@ -1,0 +1,13 @@
+# Nicht ins Image kopieren
+.git
+.gitignore
+.claude
+.DS_Store
+data
+Dockerfile
+docker-compose.yml
+.dockerignore
+.env
+.env.*
+README.md
+alternativen.html

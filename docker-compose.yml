@@ -1,0 +1,34 @@
+# mwART.solutions — Coolify-Deployment
+#
+# In Coolify: neue Resource → "Docker Compose" → dieses Repository verbinden.
+# Coolify übernimmt Domain, HTTPS-Zertifikat und Reverse-Proxy automatisch,
+# daher wird hier bewusst KEIN Port nach außen veröffentlicht.
+#
+# Environment Variables in Coolify setzen:
+#   STATS_KEY           — langer Zufallswert, schützt /stats.php (Pflicht)
+#   KONTAKT_EMPFAENGER  — Zieladresse für Formularanfragen
+#   KONTAKT_ABSENDER    — From-Adresse der Benachrichtigungs-Mails
+
+services:
+  web:
+    build: .
+    restart: unless-stopped
+    environment:
+      # Coolify ersetzt diese Platzhalter durch die dort gesetzten Werte
+      - STATS_KEY=${STATS_KEY}
+      - KONTAKT_EMPFAENGER=${KONTAKT_EMPFAENGER:-kontakt@mwart.solutions}
+      - KONTAKT_ABSENDER=${KONTAKT_ABSENDER:-formular@mwart.solutions}
+    volumes:
+      # Statistik und Kontaktanfragen überleben jedes Deployment
+      - mwart-data:/var/www/html/data
+    expose:
+      - "80"
+    healthcheck:
+      test: ["CMD", "php", "-r", "exit(@file_get_contents('http://127.0.0.1/index.html') ? 0 : 1);"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  mwart-data:

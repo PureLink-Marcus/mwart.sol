@@ -1,0 +1,3 @@
+TEST - Wenn du das siehst, funktioniert der Container!
+Container-Zeit: 2026-07-26
+Status: OK
